@@ -31,6 +31,7 @@ namespace CarRepairService.DAOs
         int AddIncident(Incident newIncident);
         List<Incident> GetIncidentsByUser(int userId);
         void IncidentPaid(int incidentId);
+        void IncidentComplete(int incidentId);
         void AddPickUpDate(int incidentId, DateTime pickUpDate);
         List<Incident> GetIncidents();
         Incident GetIncidentById(int incidentId);

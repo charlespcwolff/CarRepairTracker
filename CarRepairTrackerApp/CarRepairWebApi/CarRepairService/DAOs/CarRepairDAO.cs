@@ -383,6 +383,30 @@ namespace CarRepairService.DAOs
         }
 
         /// <summary>
+        /// Updates incident to mark it as complete.
+        /// </summary>
+        /// <param name="incidentId"></param>
+        /// <returns>Whether it succeded or not</returns>
+        public void IncidentComplete(int incidentId)
+        {
+            const string sql = "UPDATE incident " +
+                               "SET completed = 1 WHERE id = @incident_id";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@incident_id", incidentId);
+
+                if (cmd.ExecuteNonQuery() != 1)
+                {
+                    throw new Exception("Failed to mark complete.");
+                }
+            }
+        }
+
+        /// <summary>
         /// Updates incident to add pick up date for completed repair.
         /// </summary>
         /// <param name="incidentId">Id of incident to update</param>

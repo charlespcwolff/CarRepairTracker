@@ -35,7 +35,7 @@ CREATE TABLE [user] (
 
 CREATE TABLE [vehicle] (
 	id integer identity,
-	vin varchar(17) NOT NULL UNIQUE,
+	vin varchar(17) NOT NULL,
 	user_id integer NOT NULL,
 	make varchar(32) NOT NULL,
 	model varchar(32) NOT NULL,

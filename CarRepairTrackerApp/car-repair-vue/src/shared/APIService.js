@@ -8,8 +8,8 @@ export class APIService {
     async login(data) {
         const url = `${process.env.VUE_APP_REMOTE_API}/account/login`;
         let response = await axios.post(url, data);
-        if (!response.ok) {
-            throw "Your username and/or password is invalid";
+        if (response.status != 200) {
+            //throw "Your username and/or password is invalid";
         }
         return response.data;
     }
@@ -47,6 +47,19 @@ export class APIService {
 
     async putPayIncident(data) {
         const url = `${process.env.VUE_APP_REMOTE_API}/incident/paid`;
+        let res = await axios.put(url, data, {
+            headers: {
+                Authorization: "Bearer " + auth.getToken()
+            }
+        });
+        if (res.status === 400) {
+            throw res.data.message;
+        }
+        return res.data;
+    }
+
+    async markIncidentComplete(data) {
+        const url = `${process.env.VUE_APP_REMOTE_API}/incident/complete`;
         let res = await axios.put(url, data, {
             headers: {
                 Authorization: "Bearer " + auth.getToken()

@@ -21,13 +21,12 @@
             <template v-slot:button-content>
               <img src="@/assets/user.png" id="userLogo">
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item v-on:click="logOut" >Logout</b-dropdown-item>
           </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
-    <router-view/>
+    <router-view @update="updateBool" :update="update"/>
   </div>
 </template>
 
@@ -35,6 +34,11 @@
 
 import auth from "@/shared/auth";
 export default {
+  data() {
+    return {
+      update: false
+    }
+  },
   methods: {
       logOut(){
         auth.destroyToken();
@@ -42,7 +46,10 @@ export default {
       },
       isLoggedIn() {
         return auth.hasToken();
-      }
+      },
+      updateBool() {
+        this.update = !this.update;
+    }
   }
 }
 </script>

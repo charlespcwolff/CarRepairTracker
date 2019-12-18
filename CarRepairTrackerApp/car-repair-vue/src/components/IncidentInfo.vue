@@ -89,13 +89,13 @@
         submitIncident() {
             try {
                 apiService.postIncident(this.incident);
+                this.$emit("update"); // Tell vue there's a new incident to show.
                 this.goDashboard();
             } catch (error) {
                 this.error = error.message;
             }
         },
         goDashboard() {
-            this.$emit('newIncident'); // Tell vue there's a new incident to show.
             this.$router.push({name: 'dashboard'});
         }   
     }

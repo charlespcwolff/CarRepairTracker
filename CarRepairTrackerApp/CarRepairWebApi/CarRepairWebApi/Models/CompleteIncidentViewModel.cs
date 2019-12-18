@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace CarRepairWebApi.Models
 {
-    public class PayIncidentViewModel
+    public class CompleteIncidentViewModel
     {
         [Required]
         public int IncidentId { get; set; }
-
-        [Required]
-        public DateTime CompletedByDate { get; set; }
     }
 }

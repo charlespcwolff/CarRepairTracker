@@ -57,19 +57,7 @@ namespace CarRepairWebApi.Controllers
                         Description = model.Description
                     };
 
-                    //Check if vehicle exists
-                    Vehicle existingVehicle = _db.GetVehicleByVin(model.Vin);
-
-                    //if vehicle does exist, add incident to vehicle
-                    if (existingVehicle != null)
-                    {
-                        incident.VehicleId = existingVehicle.Id;
-                    }
-                    else
-                    //if vehicle does not exist, add vehicle first
-                    {
-                        incident.VehicleId = _db.AddVehicleItems(vehicle);
-                    }
+                    incident.VehicleId = _db.AddVehicleItems(vehicle);
 
                     _db.AddIncident(incident);
 
@@ -152,6 +140,10 @@ namespace CarRepairWebApi.Controllers
                     modelLine.Incident = incident;
                     modelLine.Vehicle = _db.GetVehicleByID(incident.VehicleId);
 
+                    List<ItemizedIncidentLine> repairLines = _db.GetItemizedLines(incident.Id);
+
+                    modelLine.Status = incident.GetStatus(repairLines);
+
                     model.Add(modelLine);
                 }
 
@@ -183,8 +175,6 @@ namespace CarRepairWebApi.Controllers
                     _db.IncidentPaid(model.IncidentId);
                     _db.AddPickUpDate(model.IncidentId, model.CompletedByDate);
                     result = Ok();
-
-                    result = Ok();
                 }
                 else
                 {
@@ -194,6 +184,37 @@ namespace CarRepairWebApi.Controllers
             catch
             {
                 result = BadRequest(new { Message = "Failed to mark incident paid." });
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Updates database to reflect the repair has been completed.
+        /// </summary>
+        /// <param name="incidentId"> Incident id that was completed.</param>
+        /// <returns></returns>
+        [HttpPut("complete")]
+        [Authorize(Roles = "Employee, Administrator")]
+        public IActionResult IncidentComplete([FromBody] CompleteIncidentViewModel model)
+        {
+            IActionResult result = Unauthorized();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _db.IncidentComplete(model.IncidentId);
+                    result = Ok();
+                }
+                else
+                {
+                    result = BadRequest(new { Message = "Required fields are not filled out properly" });
+                }
+            }
+            catch
+            {
+                result = BadRequest(new { Message = "Failed to mark incident complete." });
             }
 
             return result;

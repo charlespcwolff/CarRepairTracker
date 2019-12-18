@@ -3,7 +3,7 @@
     <b-row class="newform">
       <b-col></b-col> 
         <b-col cols="10" class="info">  
-        <incident-info/>
+        <incident-info @update="emitUpdate"/>
         </b-col>
      <b-col></b-col>
     </b-row>
@@ -19,8 +19,12 @@ export default {
     components: {
         IncidentInfo
       
+    },
+    methods: {
+        emitUpdate() {
+            this.$emit("update");
+        }
     }
-    
 };
 </script>
 

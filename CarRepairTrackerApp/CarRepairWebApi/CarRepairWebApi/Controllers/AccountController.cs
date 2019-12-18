@@ -68,8 +68,10 @@ namespace CarRepairWebApi.Controllers
                     // Save the user account
                     _db.AddUser(user);
 
+                    roleMgr.User = _db.GetUserByEmailOrUsername(model.Username);
+
                     // Generate a token
-                    var token = _tokenGenerator.GenerateToken(user.Username, roleMgr.RoleName);
+                    var token = _tokenGenerator.GenerateToken(roleMgr.User.Username, roleMgr.RoleName);
 
                     result = Ok(token);
                 }

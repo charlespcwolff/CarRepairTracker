@@ -26,7 +26,7 @@
             </div>
             <div id="pickup">
                 <div>Pickup Date</div>
-                <div>{{incident.pickupdate}}</div>
+                <div>{{submittedDateShort(incident.pickupDate)}}</div>
             </div>
             <div id="make">
                 <div>Make</div>
@@ -50,9 +50,8 @@
             </div>
         </div>
         <div v-if="isEmpOrAdmin" id="update-buttons">
-        <!-- Dummy Buttons for Paid, Complete Buttons until methods are added -->    
-            <button type="submit" class="btn btn-danger float-center">Paid</button>  
-            <button type="submit" class="btn btn-secondary float-center">Complete</button>
+            <add-pickup-date :id="incident.id"/>
+            <button v-on:click="markComplete" type="submit" class="btn btn-secondary float-center">Complete</button>
         </div>
         <add-repair-line v-if="isEmpOrAdmin" :id="incident.id" @reload="reload"/>
         <display-repair-lines :incidentId ="incident.id" @updateCosts="updateCosts" ref="repairLines"/>
@@ -76,24 +75,25 @@ import auth from '@/shared/auth';
 import DisplayRepairLines from "@/components/DisplayRepairLines"
 import AddRepairLine from "@/components/AddRepairLine"
 import { APIService } from "@/shared/APIService"
+import AddPickupDate from '@/components/AddPickupDate'
 const apiService = new APIService();
 
 export default {
     name: "incident-details-info",
     components: {
         DisplayRepairLines, 
-        AddRepairLine
+        AddRepairLine,
+        AddPickupDate
     },
     data() {
         return {
             customer: {},
-            payIncidentForm: {
-                incidentId: "",
-                CompletedByDate: ""
-            },
             costOfPossible: 0,
             costOfApproved: 0,
-            totalHoursRequired: 0
+            totalHoursRequired: 0,
+            markCompleteField: {
+                incidentId: ''
+            }
         }
     },
     props: {
@@ -118,10 +118,12 @@ export default {
     },
     methods: {
         submittedDateShort(date) {
-            const dateTime = date.split("T");
-            const unformatedDate = dateTime[0].split("-");
-            const formatedDate = `${unformatedDate[1]}/${unformatedDate[2]}/${unformatedDate[0]}`;
-            return formatedDate;
+            if (date != null) {
+                const dateTime = date.split("T");
+                const unformatedDate = dateTime[0].split("-");
+                const formatedDate = `${unformatedDate[1]}/${unformatedDate[2]}/${unformatedDate[0]}`;
+                return formatedDate;
+            }
         },
         async getCustomer() {
             try {
@@ -130,9 +132,9 @@ export default {
                 this.error = error.message;
             }
         },
-        async payIncident() {
+        async markComplete() {
             try {
-                this.customer = await apiService.putPayIncident(this.payIncidentForm);
+                this.customer = await apiService.markIncidentComplete(this.markCompleteField);
             } catch (error) {
                 this.error = error.message;
             }
@@ -148,6 +150,7 @@ export default {
     },
     created() {
         this.getCustomer();
+        this.markCompleteField.incidentId = this.incident.id;
     }
 }
 </script>

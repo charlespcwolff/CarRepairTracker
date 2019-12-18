@@ -5,12 +5,10 @@
          <b-row class="text-center">
          <b-col v-if="isEmpOrAdmin" cols="2" >
             <b-button-group vertical>
-              <b-button class="btn4">Pending Incident</b-button>
-              <b-button class="btn4">Approved Incidents</b-button>
-              <b-button class="btn4">In Progress</b-button>
-              <b-button class="btn4">Completed</b-button>
-              <b-button class="btn4">Work History</b-button>
-              <b-button v-if="isAdmin" class="btn4">Employee Portal</b-button>   
+              <b-button class="btn4" @click="changeFilter('Pending')">Pending Incident</b-button>
+              <b-button class="btn4" @click="changeFilter('Approved')">Approved Incidents</b-button>
+              <b-button class="btn4" @click="changeFilter('In Progress')">In Progress</b-button>
+              <b-button class="btn4" @click="changeFilter('Completed')">Completed</b-button>
             </b-button-group> 
         </b-col>
         <!-- Customer Nav -->
@@ -18,8 +16,12 @@
         <!-- Employee and Admin Display Incidents Area for Buttons Clicked in Nav -->
         <b-col cols="10" >     
             <router-link v-if="!isEmpOrAdmin" :to="{name:'new-incident'}" tag="b-button" class="btn1">New Incident</router-link>
+            <b-button v-show="(statusfilter === 'Pending' && !isEmpOrAdmin)" class="btn4" @click="changeFilter('Completed')">Incident History</b-button>
+            <b-button v-show="(statusfilter != 'Pending' && !isEmpOrAdmin)" class="btn4" @click="changeFilter('Pending')">Current</b-button>
+
             <div id="incidents">
-            <display-incidents :incidents="incidents"/></div>    
+              <display-incidents :incidents="filteredIncidents"/>
+            </div>    
          </b-col>
         <!-- Empty column. Do not use -->
         <b-col cols="1"></b-col>
@@ -36,21 +38,32 @@ import { APIService } from "@/shared/APIService"
 const apiService = new APIService();
 
 export default {
+    name: "customer-incidents",
+    components: {
+        DisplayIncidents
+    },
     computed: {
         isEmpOrAdmin() {
             return auth.isEmpOrAdmin();
         },
         isAdmin() {
             return auth.isAdmin();
+        },
+        filteredIncidents() {
+          if (this.statusfilter === "") {
+            return this.incidents;
+          } else {
+            return this.filterIncidents(this.statusfilter, this.incidents)
+          }
         }
     },
-    name: "customer-incidents",
-    components: {
-        DisplayIncidents
+    props: {
+      update: Boolean
     },
     data() {
         return {
-            incidents: []
+            incidents: [],
+            statusfilter: "Pending"
         }
     },
     methods: {
@@ -67,22 +80,43 @@ export default {
             } catch (error) {
                 this.error = error.message;
             }
+        },
+        updateIncidents() {
+          if (!this.isEmpOrAdmin){
+            this.getCustomerIncidents();
+          } else {
+            this.getIncidents();
+          }
+        },
+        filterIncidents(filter, incidents) {
+          let filteredList = [];
+          incidents.forEach(incident => {
+            if (filter === "Pending") {
+              if (incident.status != "Completed") {
+                filteredList.push(incident);
+              }
+            } else if(filter === "Approved") {
+              if (incident.status != "Completed" && incident.status != "Awaiting Evaluation" 
+                && incident.status != "Awaiting Approval") {
+                  filteredList.push(incident);
+                }
+            } else if(incident.status === filter || filter === "") {
+              filteredList.push(incident);
+            }
+          });
+          return filteredList;
+        },
+        changeFilter(newFilter) {
+          this.statusfilter = newFilter;
         }
     },
-    created() {
-      if (!this.isEmpOrAdmin){
-        this.getCustomerIncidents();
-      } else {
-        this.getIncidents();
+    watch: {
+      update() {
+        this.updateIncidents();
       }
-        
     },
-    updated() {
-      if (!this.isEmpOrAdmin){
-        this.getCustomerIncidents();
-      } else {
-        this.getIncidents();
-      }
+    created() {
+      this.updateIncidents();
     }
 }
 </script>
