@@ -72,15 +72,22 @@
                         v-model.trim="user.confirmPassword">
                     </div>
 
-
-                    <select v-model="user.roleName">
+                    
+                    <div>
+                       
+                    <select v-model="user.roleName" class="form-group form-control">
+                        
+                        <option value="" disabled selected>Select User Role</option>
                         <option value="Employee">Employee</option>
                         <option value="Administrator">Administrator</option>
                     </select>
+                    </div>
+                    
 
 
-
+                    <div>
                       <button type="submit" class="btn btn-primary float-center">Register</button>
+                    </div>
                  </form>
 
 

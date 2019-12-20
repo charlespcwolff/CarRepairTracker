@@ -45,8 +45,8 @@ export default {
     border-color:#17a2b8;
     box-shadow: 10px 10px 5px grey;
     box-sizing: content-box;
-    width: 100%;
-    background-color: #17a2b8;
+    width:50%;
+    background-color: darkgrey;
     height: auto;
 
 }
@@ -62,6 +62,7 @@ export default {
     border-left-width: 10px;
     border-top-left-radius: 10%;
     text-decoration-color: white;
+ 
 }
 
 .submitted {

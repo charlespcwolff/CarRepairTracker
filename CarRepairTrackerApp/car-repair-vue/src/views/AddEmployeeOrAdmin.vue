@@ -25,6 +25,11 @@ export default {
 
 <style scoped>
 
+.col-8{
+
+  padding-top: 11%;
+}
+
 .register img {
   width: 50%;
 }
