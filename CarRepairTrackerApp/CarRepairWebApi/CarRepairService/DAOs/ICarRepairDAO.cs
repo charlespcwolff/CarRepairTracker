@@ -45,6 +45,7 @@ namespace CarRepairService.DAOs
         int AddItemizedLine(ItemizedIncidentLine model);
         void ApproveLineItem(int itemLineId);
         void DeclineLineItem(int itemLineId);
+        int EditLineItem(ItemizedIncidentLine model);
 
         #endregion
 

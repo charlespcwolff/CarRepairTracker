@@ -10,6 +10,7 @@
               </template>
             <b-dropdown-item :to="{name:'dashboard'}">Home</b-dropdown-item>
             <b-dropdown-item :to="{name:'about'}">About</b-dropdown-item>
+       
           
           </b-nav-item-dropdown>
             <b-nav-item >
@@ -21,6 +22,7 @@
             <template v-slot:button-content>
               <img src="@/assets/user.png" id="userLogo">
             </template>
+            <b-dropdown-item v-if="isAdmin" :to="{name:'add-employee'}">Add Employee</b-dropdown-item>
             <b-dropdown-item v-on:click="logOut" >Logout</b-dropdown-item>
           </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -37,6 +39,14 @@ export default {
   data() {
     return {
       update: false
+    }
+  },
+  computed: {
+    isEmpOrAdmin() {
+      return auth.isEmpOrAdmin();
+    },
+    isAdmin() {
+      return auth.isAdmin();
     }
   },
   methods: {
@@ -58,6 +68,8 @@ export default {
 
 /* Desktop css */
 
+@media only screen and (max-width: 1950px) {
+
 
 .navbar {
 padding:0%;
@@ -66,8 +78,8 @@ padding:0%;
 }
 
 .navbar-brand {
-  padding-left: 240%;
-  font-size: 2.25rem;
+  padding-left: 200%;
+  font-size: 3.25rem;
 }
 
 #repairLogoWhite{
@@ -86,12 +98,13 @@ padding-bottom: 5%;
   /* background-color: bisque; */
   padding-bottom: 10%;
 }
+}
 
 /* MOBILE CSS */
 @media only screen and (max-width: 500px) {
 
   #app {
-  height: 823px;
+  height: 950px;
   background-color: lightgrey;
 }
  

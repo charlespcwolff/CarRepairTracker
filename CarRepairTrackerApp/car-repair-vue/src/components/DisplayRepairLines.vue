@@ -2,22 +2,21 @@
     <section id="repair-lines">
         <table id="repair-table">
             <tr>
-                <th>Description</th>
-                <th>Time to Repair</th>
-                <th>Cost</th>
-                <th>Approved</th>
+                <th id="desc">Description</th>
+                <th v-if="isEmpOrAdmin">Repair Time</th>
+                <th id="costtd">Cost</th>
+                <th>Approval</th>
                 <th v-if="isEmpOrAdmin"></th>
             </tr>
             <tr v-for="repairLine in repairLines" :key="repairLine.id">
                 <td>{{repairLine.description}}</td>
-                <td>{{repairLine.timeHours}} hours</td>
+                <td v-if="isEmpOrAdmin">{{repairLine.timeHours}} hours</td>
                 <td>${{repairLine.cost}}</td>
                 <td>
-                    <button v-if="!isEmpOrAdmin && !repairLine.approved && !repairLine.declined" v-on:click="approveRepairLine(repairLine.id)">Approve</button>
-                    <button v-if="!isEmpOrAdmin && !repairLine.approved && !repairLine.declined" v-on:click="declineRepairLine(repairLine.id)">Decline</button>
+                    <b-button variant="success" v-if="!isEmpOrAdmin && !repairLine.approved && !repairLine.declined" v-on:click="approveRepairLine(repairLine.id)">Yes</b-button>
+                    <b-button variant="danger"  v-if="!isEmpOrAdmin && !repairLine.approved && !repairLine.declined" v-on:click="declineRepairLine(repairLine.id)">No</b-button>
                     <p v-show="isEmpOrAdmin || repairLine.approved || repairLine.declined">{{approvedDeclinedMessage(repairLine.approved, repairLine.declined)}}</p>
                 </td>
-                <td><button v-if="isEmpOrAdmin">Edit</button></td>
             </tr>
         </table>
     </section>
@@ -32,7 +31,7 @@ export default {
     name: "display-repair-lines",
     props: {
         incidentId: Number
-    },
+    }, 
     data() {
         return {
             repairLines: []
@@ -118,6 +117,21 @@ export default {
 
 #repair-table {
     width: 100%;
+    background-color: floralwhite;
 }
 
+#costtd{
+    min-width: 5%;
+    padding-right: 9%;
+}
+
+#desc{
+
+    max-width: 2%;
+}
+
+.btn{
+
+ min-width: -webkit-fill-available;
+}
 </style>

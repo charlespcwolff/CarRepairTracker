@@ -47,7 +47,10 @@ export default {
   color: #42b983;
 }
 
+.home{
 
+  padding-top: 10%;
+}
 .home img {
 
   width: 40%;

@@ -8,6 +8,7 @@ import About from '@/views/About.vue'
 import NewIncident from '@/views/NewIncident.vue'
 import IncidentDetails from '@/views/IncidentDetails.vue'
 import auth from '@/shared/auth'
+import AddEmployeeOrAdmin from '@/views/AddEmployeeOrAdmin.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -50,6 +51,11 @@ const router = new VueRouter({
         path: "/incident/:incident",
         name: "incident-details",
         component: IncidentDetails
+      },
+      {
+        path: "/employee/add",
+        name: "add-employee",
+        component: AddEmployeeOrAdmin
       }
 
     ]

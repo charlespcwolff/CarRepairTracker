@@ -1,6 +1,6 @@
 <template>
    
-                <form v-on:submit.prevent="register" class="rgForm">
+                <form v-on:submit.prevent="registerEmployee" class="rgForm">
                     
                     <div class="form-group">
                         <label for="firstName">First Name</label>
@@ -72,26 +72,18 @@
                         v-model.trim="user.confirmPassword">
                     </div>
 
-                   <!-- <div class="form-group">
-                        <label for="roleName">Role Name</label>
-                        <input
-                        type="text"
-                        class="form-control"
-                        id="roleName"
-                        placeholder=" "
-                        v-model.trim="user.confirmPassword">
-                    </div>-->
 
-                    <div>
-                        <b-dropdown id="roleName" text="Select Role" class="form-control">
-                            <b-dropdown-item>Administrator</b-dropdown-item>
-                            <b-dropdown-item>Employee</b-dropdown-item>
-                        </b-dropdown>
+                    <select v-model="user.roleName">
+                        <option value="Employee">Employee</option>
+                        <option value="Administrator">Administrator</option>
+                    </select>
 
-                    </div>
+
 
                       <button type="submit" class="btn btn-primary float-center">Register</button>
                  </form>
+
+
      
               
                 
@@ -99,12 +91,11 @@
 </template>
 
 <script>
-import auth from "@/shared/auth";
 import { APIService } from "@/shared/APIService";
 const apiService = new APIService();
 
 export default {
-    name: "register-info",
+    name: "add-employee-info",
     data() {
         return {
             user:{
@@ -120,17 +111,16 @@ export default {
         }
     },
     methods: {
-        async register() {
+        async registerEmployee() {
             try {
-                let token = await apiService.register(this.user);
-                auth.saveToken(token);
+                await apiService.registerEmployee(this.user);
                 this.goDashboard();
             } catch (error) {
                 this.error = error.message;
             }
         },
         goDashboard() {
-            this.$router.push("/dashboard");
+            this.$router.push({name: 'dashboard'});
         }   
     }
 }
@@ -146,4 +136,52 @@ export default {
 
     font-size: 100%;
   }
+
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: #3498DB;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+
 </style>

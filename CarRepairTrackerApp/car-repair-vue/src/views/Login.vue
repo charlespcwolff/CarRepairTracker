@@ -31,6 +31,11 @@ export default {
   width: 40%;
 }
 
+.col-8{
+
+  padding-top: 10%;
+}
+
 @media only screen and (max-width: 1024px) {
 
   .col-8{

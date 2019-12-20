@@ -110,11 +110,6 @@ export default {
           this.statusfilter = newFilter;
         }
     },
-    watch: {
-      update() {
-        this.updateIncidents();
-      }
-    },
     created() {
       this.updateIncidents();
     }
@@ -133,7 +128,7 @@ export default {
 }
 
  .btn4 {
-    border-radius: 0%;  
+    border-radius: 5px;
     padding-left: 5%;
     padding-right: 5%;
   }
@@ -146,15 +141,18 @@ export default {
   
  
  .btn1 {
-   background-color: darkred;
-    border-radius: 0%;  
-    padding-left: 5%;
-    padding-right: 5%;
+   background-color:limegreen;
+   border-color: limegreen;
+   border-radius: 5px;  
+   padding-left: 5%;
+   padding-right: 5%;
   }
-.btn1:hover{
 
-  background-color:red;
+.btn1:hover{
+  background-color:darkgreen;
+  border-color:darkgreen;
 }
+
 }
 @media only screen and (max-width: 768px){
   .col-10 {

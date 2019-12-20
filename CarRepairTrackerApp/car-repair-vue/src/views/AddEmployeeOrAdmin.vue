@@ -4,7 +4,7 @@
         <b-col></b-col> 
           <b-col cols="8" > 
             <h2> Add Employee or Admin </h2>
-          <register-info/>
+          <AddEmployeeAdminInfo/>
           </b-col>
           <b-col></b-col>
         </b-row>
@@ -13,9 +13,9 @@
 
 <script>
 
-import RegisterInfo from "@/components/AddEmployeeAdminInfo"
+import AddEmployeeAdminInfo from "@/components/AddEmployeeAdminInfo"
 export default {
-    name: "AddEmployeeOrAdmin",
+    name: "add-employee",
     components: {
         AddEmployeeAdminInfo
     }    

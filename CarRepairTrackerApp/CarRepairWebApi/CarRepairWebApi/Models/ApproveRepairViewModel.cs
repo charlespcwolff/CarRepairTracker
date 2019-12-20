@@ -6,18 +6,9 @@ using System.Threading.Tasks;
 
 namespace CarRepairWebApi.Models
 {
-    public class UpdateRepairItemViewModel
+    public class ApproveRepairViewModel
     {
         [Required]
         public int LineId { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-
-        [Required]
-        public Decimal Cost { get; set; }
-
-        [Required]
-        public int TimeHours { get; set; }
     }
 }

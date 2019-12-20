@@ -1,7 +1,13 @@
 <template>
-    <div id="IncidentDetails">
+<b-container >
+    <b-row class="IncidentDetails">
+        <b-col></b-col> 
+        <b-col cols="10" class="info"> 
         <incident-details-info :incident="incident" :vehicle="vehicle" :status="status"/>
-    </div>
+        </b-col>
+        <b-col></b-col>
+        </b-row>
+</b-container>
 </template>
 
 <script>

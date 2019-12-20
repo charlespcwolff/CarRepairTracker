@@ -31,8 +31,9 @@
   color: #42b983;
 }
 .text {
+  text-align: center;
   width: 90%;
-  padding-top: 10%;
+  padding-top: 25%;
   padding-left: 10%;
 }
 

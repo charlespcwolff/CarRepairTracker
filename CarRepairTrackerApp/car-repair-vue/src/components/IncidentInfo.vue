@@ -2,7 +2,7 @@
         <form v-on:submit.prevent="submitIncident" class="form">
              <h1><strong>New Incident Information</strong></h1>
             <div class="form-group">
-                <label for="vin">VIN</label>
+                <label for="vin" class="label">VIN</label>
                 <input
                 type="text"
                 class="form-control"
@@ -12,7 +12,7 @@
             </div>
 
             <div class="form-group">
-                <label for="make">Make</label>
+                <label for="make" class="label">Make</label>
                 <input
                 type="text"
                 class="form-control"
@@ -22,7 +22,7 @@
             </div>
 
             <div class="form-group">
-                <label for="vin">Model</label>
+                <label for="vin" class="label">Model</label>
                 <input
                 type="text"
                 class="form-control"
@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-group">
-                <label for="year">Year</label>
+                <label for="year" class="label">Year</label>
                 <input
                 type="text"
                 class="form-control"
@@ -42,7 +42,7 @@
             </div>
 
             <div class="form-group">
-                <label for="color">Color</label>
+                <label for="color" class="label">Color</label>
                 <input
                 type="text"
                 class="form-control"
@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label for="problem description">Problem Description</label>
+                <label for="problem description" class="label">Problem Description</label>
                 <textarea 
                 type="text"
                 class="form-control"
@@ -86,9 +86,9 @@
         }
     },
     methods: {
-        submitIncident() {
+        async submitIncident() {
             try {
-                apiService.postIncident(this.incident);
+                await apiService.postIncident(this.incident);
                 this.$emit("update"); // Tell vue there's a new incident to show.
                 this.goDashboard();
             } catch (error) {
@@ -103,7 +103,10 @@
 </script>
 <style scoped>
 
+ .label{
+text-transform: uppercase;
 
+}
  
 h1{
     text-align: center;

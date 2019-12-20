@@ -305,7 +305,7 @@ namespace CarRepairWebApi.Controllers
         /// <returns></returns>
         [HttpPut("line/approve")]
         [Authorize(Roles = "Customer")]
-        public IActionResult ApproveLineItem([FromBody] UpdateRepairItemViewModel model)
+        public IActionResult ApproveLineItem([FromBody] ApproveRepairViewModel model)
         {
             IActionResult result = Unauthorized();
 
@@ -338,7 +338,7 @@ namespace CarRepairWebApi.Controllers
         /// <returns></returns>
         [HttpPut("line/decline")]
         [Authorize(Roles = "Customer")]
-        public IActionResult DeclineLineItem([FromBody] UpdateRepairItemViewModel model)
+        public IActionResult DeclineLineItem([FromBody] ApproveRepairViewModel model)
         {
             IActionResult result = Unauthorized();
 
@@ -359,6 +359,32 @@ namespace CarRepairWebApi.Controllers
             catch
             {
                 result = BadRequest(new { Message = "Declining repair line failed." });
+            }
+
+            return result;
+        }
+
+        [HttpPut("line/edit")]
+        [Authorize(Roles = "Employee, Administrator")]
+        public IActionResult EditLineItem(UpdateRepairItemViewModel model)
+        {
+            IActionResult result = Unauthorized();
+
+            try
+            {
+                ItemizedIncidentLine line = _db.GetItemizedLineById(model.LineId);
+
+                
+                line.Description = model.Description;
+                line.Cost = model.Cost;
+                line.TimeHours = model.TimeHours;
+                
+
+                _db.EditLineItem(line);
+            }
+            catch
+            {
+                result = BadRequest(new { Message = "Unable to update Incident Line." });
             }
 
             return result;

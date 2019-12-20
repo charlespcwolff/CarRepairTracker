@@ -647,6 +647,36 @@ namespace CarRepairService.DAOs
             return itemizedIncidentLine;
         }
 
+        /// <summary>
+        /// Edits fields in the line item then sets line item to unapproved.
+        /// </summary>
+        /// <param name="itemLineId"></param>
+        /// <returns>Whether it succeded or not</returns>
+        public int EditLineItem(ItemizedIncidentLine model)
+        {
+            //pass in new view model and keep the same line id
+            const string sql = "UPDATE incident_itemizated " +
+                               "SET description = @description, cost = @cost, time_hours = @time_hours, approved = null, declined = null" + 
+                               "WHERE incident_id = model.IncidentId ";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+
+              
+                SqlCommand cmd = new SqlCommand(sql + _getLastIdSQL, conn);
+                    cmd.Parameters.AddWithValue("@incident_id", model.IncidentId);
+                    cmd.Parameters.AddWithValue("@description", model.Description);
+                    cmd.Parameters.AddWithValue("@cost", model.Cost);
+                    cmd.Parameters.AddWithValue("@time_hours", model.TimeHours);
+                    model.Id = (int)cmd.ExecuteScalar();
+
+                return model.Id;
+               
+            }
+        }
+
+
         #endregion
 
         #region Vehicle

@@ -1,70 +1,61 @@
 <template>
-<b-row>
-    <b-col cols="2"> </b-col>
-    <b-col cols="10">
-    <section id="incident-details">
-        <div id="incident-header">
-            <div id="customer-name">
-                <div>Owner</div>
-                <div>{{customer.firstName}} {{customer.lastName}}</div>
-            </div>
-            <div id="incident-id">
-                <div>Incident Id</div>
-                <div>{{incident.id}}</div>
-            </div>
-            <div id="vin">
-                <div>Vin</div>
-                <div>{{vehicle.vin}}</div>
-            </div>
-            <div id="submit-date">
-                <div>Submitted Date</div>
-                <div>{{submittedDateShort(incident.submittedDate)}}</div>
-            </div>
-            <div id="status">
-                <div>Status</div>
-                <div>{{status}}</div>
-            </div>
-            <div id="pickup">
-                <div>Pickup Date</div>
-                <div>{{submittedDateShort(incident.pickupDate)}}</div>
-            </div>
-            <div id="make">
-                <div>Make</div>
-                <div>{{vehicle.make}}</div>
-            </div>
-             <div id="color">
-                <div>Color</div>
-                <div>{{vehicle.color}}</div>
-            </div>
-            <div id="year">
-                <div>Year</div>
-                <div>{{vehicle.year}}</div>
-            </div>
-            <div id="model">
-                <div>Model</div>
-                <div>{{vehicle.model}}</div>
-            </div>
-            <div id="description">
-                <div>Description of Problem</div>
-                <div>{{incident.description}}</div>
-            </div>
-        </div>
-        <div v-if="isEmpOrAdmin" id="update-buttons">
-            <add-pickup-date :id="incident.id"/>
-            <button v-on:click="markComplete" type="submit" class="btn btn-secondary float-center">Complete</button>
-        </div>
-        <add-repair-line v-if="isEmpOrAdmin" :id="incident.id" @reload="reload"/>
-        <display-repair-lines :incidentId ="incident.id" @updateCosts="updateCosts" ref="repairLines"/>
+<b-row class="detailsCard">
+        <b-card
+         header-bg-variant="info"
+         header-text-variant="white"
+         border-variant="info"
+         no-body
+         style="max-width: 20rem;"
+        >
+            <template v-slot:header >
+                <h4 class="text-center" id="detailsTitle"> <b-button :to="{name:'dashboard'}" id="incidentbackbtn"> &lt; </b-button><strong>  INCIDENT DETAILS</strong></h4>
+            </template>
+             <b-card-body >
+                <b-card-title>{{vehicle.year}} {{vehicle.make}} {{vehicle.model}}</b-card-title>
+                <b-card-sub-title class="mb-2"><strong>VIN:</strong> {{vehicle.vin}}</b-card-sub-title>
+                <b-list-group flush>
+                    <b-list-group-item><strong>COLOR:</strong> {{vehicle.color}} </b-list-group-item>
+                    <b-list-group-item><strong>OWNER:</strong> {{customer.firstName}} {{customer.lastName}} </b-list-group-item>
+                    <b-list-group-item><strong>SUBMITTED ON:</strong> {{submittedDateShort(incident.submittedDate)}} </b-list-group-item>
+                    <b-list-group-item>    
+                    <b-card-text>
+                        <div><strong><u>DESCRIPTION OF PROBLEM</u></strong></div>
+                        <div id="descbox">{{incident.description}}</div>
+                    </b-card-text>
+                    </b-list-group-item>
+                    <b-list-group-item> 
+                        <div><strong><u>STATUS</u></strong></div>
+                        <div>{{status}}</div>
+                    </b-list-group-item>
+                    <b-list-group-item><strong>PICK-UP DATE:</strong> {{incident.pickupdate}}</b-list-group-item>
+                </b-list-group>
+            </b-card-body>
+        </b-card>
 
-        <div v-show="isEmpOrAdmin" id="total-hours">Required {{totalHoursRequired}} Hours for Approved Items</div>
-        
-        <div id="cost-totals">
-            <div class="cost"><p>Cost for Full Repairs:</p><p>${{costOfPossible}}</p></div>
-            <div class="cost"><p>Cost of Approved Repairs:</p><p>${{costOfApproved}}</p></div>
-            <div class="cost"><p>Remaining Balance:</p><p>${{remainingCost}}</p></div>
+        <b-card
+        header-bg-variant="info"
+        header-text-variant="white"
+        border-variant="info"
+        no-body
+        style="max-width: 20rem;"
+        >
+            <template v-slot:header  id="repairTitle">
+                <h4 class="text-center" ><b-button :to="{name:'dashboard'}" id="repairbackbtn">&lt;</b-button><strong>REPAIR DETAILS</strong></h4>
+            </template>
+                <display-repair-lines :incidentId="incident.id" @updateCosts="updateCosts" ref="repairLines"/>
+                <b-list-group flush>
+                    <b-list-group-item><strong>FULL REPAIR COST:</strong> ${{costOfPossible}} </b-list-group-item>
+                    <b-list-group-item><strong>APPROVED REPAIR COST:</strong> ${{costOfApproved}} </b-list-group-item>
+                    <b-list-group-item><strong>REMAINING BALANCE:</strong> ${{remainingCost}} </b-list-group-item>
+                    <b-list-group-item v-show="isEmpOrAdmin" id="total-hours"><strong>TOTAL LABOUR: </strong>{{totalHoursRequired}}</b-list-group-item>
+                </b-list-group>
+            <add-repair-line v-if="isEmpOrAdmin" :id="incident.id" @reload="reload"/>
+        </b-card>
+       <div v-if="isEmpOrAdmin" class="buttons">
+            <add-pickup-date :id="incident.id"  @reload="reload"/>
+            <button v-on:click="markComplete" type="submit" class="btn btn-success">Complete</button>
         </div>
-    </section>
-</b-col>
+    
 <b-col cols="2"></b-col>
 
 </b-row>
@@ -88,6 +79,10 @@ export default {
     data() {
         return {
             customer: {},
+            payIncidentForm: {
+                incidentId: "",
+                CompletedByDate: ""
+            },
             costOfPossible: 0,
             costOfApproved: 0,
             totalHoursRequired: 0,
@@ -96,6 +91,8 @@ export default {
             }
         }
     },
+
+  
     props: {
         incident: Object,
         vehicle: Object,
@@ -134,7 +131,8 @@ export default {
         },
         async markComplete() {
             try {
-                this.customer = await apiService.markIncidentComplete(this.markCompleteField);
+                await apiService.markIncidentComplete(this.markCompleteField);
+                this.$router.push({name: 'dashboard'});
             } catch (error) {
                 this.error = error.message;
             }
@@ -157,67 +155,60 @@ export default {
 
 <style scoped>
 
+#incidentbackbtn{
+
+    margin-right: 2%;
+}
+
+
+#repairbackbtn{
+    
+    margin-right: 8.5%;
+}
+
+
+.card{
+    margin-top: 3%;
+    width: 100%;
+}
 #incident-details{
 
     padding-top: 15%;
 }
 
-#incident-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr 2fr 2fr;
-    grid-template-areas: "name name incident submit status pickup"
-                         "vin vin vin description description description"
-                         "make make make  description description description"
-                         "model color year description description description"
-                         ". . . description description description";
+.detailsCard{
+padding-top: 35%;
+
+}
+.card-body{
+
+    background-color:floralwhite;
+}
+.list-group-item{
+
+   background-color:floralwhite;
+}
+.border-info{
+
+    border-width: 2px;
 }
 
-#customer-name {
-    grid-area: name;
-}
+#repairTitle{
 
-#incident-id {
-    grid-area: incident;
+    margin-top: 5%;
 }
-
-#vin {
-    grid-area: vin;
-}
-
-#submit-date {
-    grid-area: submit;
-}
-
-#status {
-    grid-area: status;
-}
-
-#make {
-    grid-area: make;
-}
-
-#model {
-    grid-area: model;
-}
-
-#year {
-    grid-area: year;
-}
-
-#color {
-    grid-area: color;
-}
-
-#description {
-    grid-area: description;
-}
-
-#pickup {
-    grid-area: pickup;
-}
-
 .cost {
     display: flex;
+}
+
+.buttons{
+    margin-top: 2%;
+    margin-left: 16%;
+    padding-left: 1%;
+}
+
+.btn-success{
+    margin-top: 2%;
 }
 
 </style>

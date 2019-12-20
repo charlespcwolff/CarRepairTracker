@@ -7,16 +7,36 @@ export class APIService {
 
     async login(data) {
         const url = `${process.env.VUE_APP_REMOTE_API}/account/login`;
-        let response = await axios.post(url, data);
-        if (response.status != 200) {
-            //throw "Your username and/or password is invalid";
+        let response;
+
+        try {
+            response = await axios.post(url, data);
+        } catch (error) {
+            if (error.response.status != 200) {
+                throw "Your username and/or password is invalid";
+            }
         }
+        
+        
         return response.data;
     }
 
     async register(data) {
         const url = `${process.env.VUE_APP_REMOTE_API}/account/register`;
         let res = await axios.post(url, data);
+        if (res.status === 400) {
+            throw res.data.message;
+        }
+        return res.data;
+    }
+
+    async registerEmployee(data) {
+        const url = `${process.env.VUE_APP_REMOTE_API}/account/register/employee`;
+        let res = await axios.post(url, data, {
+            headers: {
+                Authorization: "Bearer " + auth.getToken()
+            }
+        });
         if (res.status === 400) {
             throw res.data.message;
         }

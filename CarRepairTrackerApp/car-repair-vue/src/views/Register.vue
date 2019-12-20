@@ -27,12 +27,12 @@ export default {
 
 .register{
 
-  padding-top: 30%;
+  padding-top: 10%;
 }
 
 h2{
 
-  padding: 10 %
+  padding: 10%
 }
 
 

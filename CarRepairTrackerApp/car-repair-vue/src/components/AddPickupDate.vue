@@ -1,20 +1,15 @@
 <template>
    <div>
-       <button v-on:click="ItemFormShow = !ItemFormShow" type="submit" class="btn btn-primary float-center">Mark Paid & Add Pickup Date</button>
-    <form v-on:submit.prevent="payIncident" class="rgForm">
-        <div v-if="ItemFormShow">
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input
-                type="Date"
-                class="pickup-date"
-                id="description"
-                placeholder="Please enter date"
-                v-model.trim="payIncidentForm.CompletedByDate">
-            </div>
-            <button type="submit" class="btn btn-primary float-center">Submit Pickup Date</button>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input
+            type="Date"
+            class="pickup-date"
+            id="description"
+            placeholder="Please enter date"
+            v-model.trim="payIncidentForm.CompletedByDate">
         </div>
-        </form>
+            <button v-on:click="payIncident" class="btn btn-primary float-center">Submit Pickup Date</button>   
     </div>
 </template>
 
@@ -39,7 +34,8 @@ export default {
     methods: {
         async payIncident() {
             try {
-                this.customer = await apiService.putPayIncident(this.payIncidentForm);
+                await apiService.putPayIncident(this.payIncidentForm);
+                this.$router.push({name: 'dashboard'});
             } catch (error) {
                 this.error = error.message;
             }
@@ -58,7 +54,14 @@ export default {
   align-content: center;
 }
 .btn {
-
+    height: 100%;
     font-size: 100%;
+    justify-content: center;  
+    align-content: center;
   }
+
+.slide-out{
+    display: flex;
+    align-items: flex-start;
+}
 </style>

@@ -143,7 +143,7 @@ namespace CarRepairWebApi.Controllers
         /// <returns></returns>
         [HttpPost("register/employee")]
         [Authorize(Roles = "Administrator")]
-        public IActionResult AddEmployeeOrAdim(EmployeeAdminRegisterViewModel model/* View model for the new user to add */)
+        public IActionResult AddEmployeeOrAdim([FromBody] EmployeeAdminRegisterViewModel model)
         {
             IActionResult result = null;
 
@@ -161,7 +161,7 @@ namespace CarRepairWebApi.Controllers
                 {
                     Hash = pwdMgr.Hash,
                     Salt = pwdMgr.Salt,
-                    RoleId = roleMgr.GetIdForRole(model.RoleName),//create drop down with employee and admin
+                    RoleId = roleMgr.GetIdForRole(model.RoleName),
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,

@@ -9,7 +9,6 @@ To Use:
 ** Run SQL script in CarRepairWebApi\CarRepairService\DAOs\Scripts to build the database
 ** Run npm install in VS Code console to install the required node modules
 ** Run CarRepairWebApi in VS and car-repair-vue npm run serve in VS Code console
-** No default data added to the database yet, will have to register new customer and add incident to see anything.
 ** To log in as Employee, there is a default Admin account added when you run the sql script, to login the username is "Admin" and the password is "pass".
 
 Personal work:
@@ -29,5 +28,4 @@ Personal work:
 2) Other components were done by others, like the AddRepairLine (Jason), AddEmployee (Kevin).
     -- I'm probably forgetting a few though, as I've been weaving in and out of these files so much I've lost track of what I did originally did and what I worked with after the fact. So please don't take this as me taking credit for everything else.
 3) CSS work, html structure, vue work was done/overseen by Jesse. The only parts that are mine are basic work to let me prototype the page quickly and make sure the js for it was working when I got ahead of where Jesse was. (Example: Incident Details view in this upload.)
-    -- I expect most of that work with get replaced as he goes through it.
 4) Jesse was the one in charge of the vue front end, I've been trying to keep in line for what he wants/needs for it.

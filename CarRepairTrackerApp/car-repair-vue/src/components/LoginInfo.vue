@@ -53,7 +53,6 @@ export default {
         async login() {
             try {
                 let token = await apiService.login(this.user);
-                window.console.log("hit");
                 auth.saveToken(token);
                 this.goDashboard();
             } catch (error) {
